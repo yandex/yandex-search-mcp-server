@@ -6,7 +6,7 @@ This Model Context Protocol (MCP) server lets AI assistants like Claude and Curs
 
 Connect directly to Yandex's hosted MCP server (no need to run it locally).
 
-### Yandex MCP URL for Remote Connection
+### Yandex Search MCP URL for Remote Connection
 
 ```
 https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse
@@ -53,7 +53,7 @@ For the changes to take effect:
 
 1. Completely quit Claude Desktop (not just close the window)
 2. Start Claude Desktop again
-3. Click "Search and Tools" to verify that yandex-search is enabled and running
+3. Click "Search and Tools" to verify that yandexSearch is enabled and running
 
 ## How to Add Yandex Search MCP to Cursor 🤖
 
@@ -85,7 +85,7 @@ Add the following text to your Claude Desktop configuration file:
 use yandexSearch to find information about the best AI Agent frameworks in 2025
 ```
 2. Cursor will ask you to confirm that it should use yandexSearch, click the Run Tool button or press (⌘↵) to confirm.
-3. You should see "called searc-api_post" in the chat and the answer based on the web search results.
+3. You should see "called search-api_post" in the chat and the answer based on the web search results.
 
 ## How to Add Yandex Search MCP to Visual Studio Code 🤖
 
