@@ -16,7 +16,8 @@ https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse
 
 The Yandex Search MCP server includes the following tools:
 
-- **search-api_post**: Performs a real-time web search and returns an encoded XML of the search results page
+- (NEW) **ai_search_with_yazeka_post** Performs a real-time web search and returns an AI-generated answer based on the search results using Yandex Yazeka AI model. 
+- **web_search_post**: Performs a real-time web search and returns an encoded XML of the search results page
 
 ## How to Add Yandex Search MCP to Claude Desktop 🤖
 
