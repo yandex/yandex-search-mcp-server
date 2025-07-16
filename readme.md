@@ -19,6 +19,11 @@ The Yandex Search MCP server includes the following tools:
 - (NEW) **ai_search_with_yazeka_post** Performs a real-time web search and returns an AI-generated answer based on the search results using Yandex Yazeka AI model. 
 - **web_search_post**: Performs a real-time web search and returns an encoded XML of the search results page
 
+## Getting an API Key
+
+To use this MCP server, you'll need a Yandex Search API key:
+- [Get API Key Documentation](https://yandex.cloud/ru/docs/search-api/api-ref/authentication)
+
 ## How to Add Yandex Search MCP to Claude Desktop 🤖
 
 ### 1. Configure Claude Desktop to Recognize MCP Servers
@@ -42,7 +47,10 @@ Add the following text to your Claude Desktop configuration file:
         "-y",
         "mcp-remote",
         "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse"
-      ]
+      ],
+      "headers": {
+        "ApiKey": "<your_api_key"
+      }
     }
   }
 }
@@ -73,7 +81,10 @@ Add the following text to your Claude Desktop configuration file:
   "servers": {
     "yandexSearch": {
       "type": "sse",
-      "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse"
+      "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
+      "headers": {
+        "ApiKey": "<your_api_key>"
+      }
     }
   }
 }
@@ -105,7 +116,10 @@ Add the following text to your Claude Desktop configuration file:
   "servers": {
     "yandexSearch": {
       "type": "sse",
-      "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse"
+      "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
+      "headers": {
+        "ApiKey": "<your_api_key>"
+      }
     }
   }
 }
