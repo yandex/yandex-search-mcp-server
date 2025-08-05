@@ -46,7 +46,7 @@ Add the following text to your Claude Desktop configuration file:
         "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse"
       ],
       "headers": {
-        "ApiKey": "<your_api_key"
+        "ApiKey": "<your_api_key>"
       }
     }
   }
