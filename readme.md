@@ -2,6 +2,13 @@
 
 This Model Context Protocol (MCP) server lets AI assistants like Claude and Cursor use the Yandex Search API for searching the web. Yandex Search enables LLM agents to safely and easily find up-to-date information on the internet.
 
+## Available Tools
+
+The Yandex Search MCP server includes the following tools:
+
+- **ai_search_post** Performs a real-time web search and returns an AI-generated answer based on the search results using Yandex Yazeka AI model. 
+- **web_search_post**: Performs a real-time web search and returns answer with sources
+
 ## Getting API Key
 
 To use this MCP server, you need to be a customer of Yandex Search API. You need a Yandex Search API key:
@@ -13,14 +20,10 @@ To use this MCP server, you need to be a customer of Yandex Search API. You need
 https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse
 ```
 
-### Available Tools
+## How to use Yandex Search MCP Remotely (recommended)
+### How to Add Yandex Search MCP to Claude 🤖
 
-The Yandex Search MCP server includes the following tools:
-
-- **ai_search_with_yazeka_post** Performs a real-time web search and returns an AI-generated answer based on the search results using Yandex Yazeka AI model. 
-- **web_search_post**: Performs a real-time web search and returns answer with sources
-
-### 1. Configure Claude Desktop to Recognize MCP Servers
+#### 1. Configure Claude Desktop to Recognize MCP Servers
 
 Open the Claude Desktop app and enable Developer Mode from the top-left menu bar.
 
@@ -28,7 +31,7 @@ Once enabled, open Settings (also from the top-left menu bar) and navigate to th
 
 Click the Edit Config button to open the claude_desktop_config.json file
 
-### 2. Add Yandex Search MCP to Claude Desktop
+#### 2. Add Yandex Search MCP to Claude Desktop
 
 Add the following text to your Claude Desktop configuration file:
 
@@ -50,7 +53,7 @@ Add the following text to your Claude Desktop configuration file:
 }
 ```
 
-### 3. Restart Claude Desktop
+#### 3. Restart Claude Desktop
 
 For the changes to take effect:
 
@@ -58,15 +61,15 @@ For the changes to take effect:
 2. Start Claude Desktop again
 3. Click "Search and Tools" to verify that yandexSearch is enabled and running
 
-## How to Add Yandex Search MCP to Cursor 🤖
+### How to Add Yandex Search MCP to Cursor 🤖
 
-### 1. Configure Cursor to Recognize MCP Servers
+#### 1. Configure Cursor to Recognize MCP Servers
 
 Open Settings and navigate to Tools and Integrations in the left panel.
 
 Click the Add Custom MCP button to create the mcp.json config file in cursor
 
-### 2. Add Yandex Search MCP to Cursor
+#### 2. Add Yandex Search MCP to Cursor
 
 Add the following text to your Claude Desktop configuration file:
 
@@ -84,7 +87,7 @@ Add the following text to your Claude Desktop configuration file:
 }
 ```
 
-### 3. Find information on the web with yandexSearch
+#### 3. Find information on the web with yandexSearch
 
 1. Verify the setup by typing the following text in the chat:
 ```
@@ -93,21 +96,21 @@ use yandexSearch to find information about the best AI Agent frameworks in 2025
 2. Cursor will ask you to confirm that it should use yandexSearch, click the Run Tool button or press (⌘↵) to confirm.
 3. You should see "called search-api_post" in the chat and the answer based on the web search results.
 
-## How to Add Yandex Search MCP to Visual Studio Code 🤖
+### How to Add Yandex Search MCP to Visual Studio Code 🤖
 
-### 1. Configure Visual Studio Code to Recognize MCP Servers
+#### 1. Configure Visual Studio Code to Recognize MCP Servers
 
 Enable the [chat.mcp.enabled](vscode://settings/chat.mcp.enabled) setting in VS Code to enable MCP support.
 
 Add a .vscode/mcp.json file in your workspace to configure MCP servers for a workspace.
 
-### 2. Add Yandex Search MCP to Visual Studio Code
+#### 2. Add Yandex Search MCP to Visual Studio Code
 
 Add the following text to your Claude Desktop configuration file:
 
 ```json
 {
-  "servers": {
+  "mcpServers": {
     "yandexSearch": {
       "type": "sse",
       "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
@@ -119,7 +122,7 @@ Add the following text to your Claude Desktop configuration file:
 }
 ```
 
-### 3. Open CoPilot in Agent Mode
+#### 3. Open CoPilot in Agent Mode
 
 1. Open the Chat view (⌃⌘I), and select Agent mode from the dropdown.
 2. Select the Tools button to view the list of available tools.
@@ -127,21 +130,21 @@ Add the following text to your Claude Desktop configuration file:
 4. To ensure that the AI Agent uses yandexSearch click the Add Context Button, and select search-api_post from the available tools.
 5. For advanced configuration settings visit [the official VS Code MCP tutorial](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
 
-## 4. Local Launch
+## How to run Yandex Search MCP locally
 
-## Prerequisites
+### Prerequisites
 
 - Python 3.10+
 - Node.js 16+ (for MCP development)
 - Docker 20+ or Podman 3+ (for containerized deployment)
 
-## Installation
+### Installation
 
 ```bash
 git clone git@github.com:yandex/yandex-search-mcp-server.git
 cd /path/to/yandex-search-mcp-server
 ```
-## 1. Running with Docker/Podman + MCP Configs
+### Option 1: Use Yandex Search MCP with Docker/Podman
 
 To run the MCP server in a container using Docker or Podman:
 
@@ -162,8 +165,6 @@ To run the MCP server in a container using Docker or Podman:
      ```
 
 This will create an image named `yandex-mcp-server-image`.
-
-### Integration with MCP Settings for Docker/Podman
 
 You need to add MCP server configs and set `SEARCH_API_KEY`.
 
@@ -211,17 +212,17 @@ For container deployment, if your MCP system supports direct interaction with Do
 
 After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
 
-## 2. Running with Python + MCP Config
+### Option 2: Use Python + MCP Config
 
-## Installation
+#### Step 1. Install required libraries
 
 ```bash
   pip install -r requirements.txt
 ```
 
-### Integration with MCP Settings for Local Python Execution
+#### Step 2. Configure the MCP Settings for Local Python Execution
 
-To integrate the MCP server with your system using Python, add the following configuration to your MCP settings and set `SEARCH_API_KEY`:
+To setup the MCP server on your system using Python, add the following configuration to your MCP settings and set `SEARCH_API_KEY`:
 
 ```json
 {
@@ -246,7 +247,7 @@ To integrate the MCP server with your system using Python, add the following con
 
 After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
 
-## 3. Running Python Local MCP
+#### Step 3. Launch the local MCP Server
 
 To run the MCP server directly on your machine without containerization:
 
