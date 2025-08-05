@@ -1,10 +1,11 @@
-# Yandex Search MCP Server 🔍
+# Yandex Search MCP Server
 
 This Model Context Protocol (MCP) server lets AI assistants like Claude and Cursor use the Yandex Search API for searching the web. Yandex Search enables LLM agents to safely and easily find up-to-date information on the internet.
 
-## Yandex Search Remote MCP
+## Getting API Key
 
-Connect directly to Yandex's hosted MCP server (no need to run it locally).
+To use this MCP server, you need to be a customer of Yandex Search API. You need a Yandex Search API key:
+- [API Key Documentation](https://yandex.cloud/ru/docs/search-api/api-ref/authentication)
 
 ### Yandex Search MCP URL for Remote Connection
 
@@ -16,15 +17,8 @@ https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse
 
 The Yandex Search MCP server includes the following tools:
 
-- (NEW) **ai_search_with_yazeka_post** Performs a real-time web search and returns an AI-generated answer based on the search results using Yandex Yazeka AI model. 
-- **web_search_post**: Performs a real-time web search and returns an encoded XML of the search results page
-
-## Getting an API Key
-
-To use this MCP server, you'll need a Yandex Search API key:
-- [Get API Key Documentation](https://yandex.cloud/ru/docs/search-api/api-ref/authentication)
-
-## How to Add Yandex Search MCP to Claude Desktop 🤖
+- **ai_search_with_yazeka_post** Performs a real-time web search and returns an AI-generated answer based on the search results using Yandex Yazeka AI model. 
+- **web_search_post**: Performs a real-time web search and returns answer with sources
 
 ### 1. Configure Claude Desktop to Recognize MCP Servers
 
@@ -132,6 +126,164 @@ Add the following text to your Claude Desktop configuration file:
 3. The AI Agent will automatically select yandexSearch when it needs to find information on the internet.
 4. To ensure that the AI Agent uses yandexSearch click the Add Context Button, and select search-api_post from the available tools.
 5. For advanced configuration settings visit [the official VS Code MCP tutorial](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)
+
+## 4. Local Launch
+
+## Prerequisites
+
+- Python 3.10+
+- Node.js 16+ (for MCP development)
+- Docker 20+ or Podman 3+ (for containerized deployment)
+
+## Installation
+
+```bash
+git clone git@github.com:yandex/yandex-search-mcp-server.git
+cd /path/to/yandex-search-mcp-server
+```
+## 1. Running with Docker/Podman + MCP Configs
+
+To run the MCP server in a container using Docker or Podman:
+
+1. Ensure Docker and Docker Compose, or Podman and Podman Compose, are installed on your system.
+2. For Podman users: If you need to pull images from Docker Hub, first authenticate:
+   ```bash
+   podman login docker.io
+   ```
+   Enter your Docker Hub username and password when prompted.
+3. Build the container:
+   - Using Docker:
+     ```bash
+     docker build -t yandex-mcp-server-image:latest .
+     ```
+   - Using Podman:
+     ```bash
+     podman build -t yandex-mcp-server-image:latest .
+     ```
+
+This will create an image named `yandex-mcp-server-image`.
+
+### Integration with MCP Settings for Docker/Podman
+
+You need to add MCP server configs and set `SEARCH_API_KEY`.
+
+For container deployment, if your MCP system supports direct interaction with Docker or Podman containers, you might use configurations like these (adjust based on your MCP system's requirements):
+
+- Using Docker:
+```json
+{
+  "mcpServers": {
+    "yandex-search-api-docker": {
+      "autoApprove": [],
+      "disabled": true,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "sh",
+      "args": [
+        "-c",
+        "docker rm -f yandex-mcp-container; docker run -i --name yandex-mcp-container --env SEARCH_API_KEY=<your_api_key> yandex-mcp-server-image:latest"
+      ]
+    }
+  }
+}
+```
+
+- Using Podman:
+```json
+{
+  "mcpServers": {
+    "yandex-search-api-podman": {
+      "autoApprove": [],
+      "disabled": true,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "sh",
+      "args": [
+        "-c",
+        "podman rm -f yandex-mcp-container; podman run -i --name yandex-mcp-container --env SEARCH_API_KEY=<your_api_key> yandex-mcp-server-image:latest"
+      ]
+    }
+  }
+}
+```
+
+**Important**: Replace `<your_api_key>` with your actual Yandex Search API key. Ensure that only one instance of the server (local or Docker) is active at a time to avoid conflicts.
+
+After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
+
+## 2. Running with Python + MCP Config
+
+## Installation
+
+```bash
+  pip install -r requirements.txt
+```
+
+### Integration with MCP Settings for Local Python Execution
+
+To integrate the MCP server with your system using Python, add the following configuration to your MCP settings and set `SEARCH_API_KEY`:
+
+```json
+{
+  "mcpServers": {
+    "yandex-search-api": {
+      "autoApprove": [],
+      "disabled": true,
+      "timeout": 60,
+      "type": "stdio",
+      "command": "env",
+      "args": [
+        "SEARCH_API_KEY=<your_api_key>",
+        "python3",
+        "/path/to/mcp-server-demo/server.py"
+      ]
+    }
+  }
+}
+```
+
+**Important**: Replace `<your_api_key>` with your actual Yandex Search API key and update `/path/to/mcp-server-demo` to the actual path where the repository is located on your system if necessary.
+
+After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
+
+## 3. Running Python Local MCP
+
+To run the MCP server directly on your machine without containerization:
+
+1. Ensure you have Python 3.10+ installed.
+2. Set the required environment variable for the API key (replace `<your_api_key>` with your actual Yandex Search API key):
+```bash
+export SEARCH_API_KEY=<your_api_key>
+```
+3. Run the server:
+```bash
+python3 server.py
+```
+
+The server will start and listen for input on stdin, responding on stdout. Typically, this server is integrated with a system that communicates via MCP.
+
+### Example Requests
+
+#### Web Search Example
+```json
+{
+    "query": "Who won the most recent Formula 1 race in 2025?",
+    "search_region": "en"
+}
+```
+
+#### AI Search Example
+```json
+{
+    "query": "Who won the most recent Formula 1 race in 2025?",
+    "search_region": "en"
+}
+```
+
+## Troubleshooting
+
+- If the server fails to start, ensure all dependencies are installed correctly (`pip install -r requirements.txt`).
+- If you encounter authentication errors, double-check that the `SEARCH_API_KEY` is correctly set in your environment or configuration.
 
 <br>
 
