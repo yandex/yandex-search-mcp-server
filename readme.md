@@ -14,13 +14,13 @@ The Yandex Search MCP server includes the following tools:
 To use this MCP server, you need to be a customer of Yandex Search API. You need a Yandex Search API key:
 - [API Key Documentation](https://yandex.cloud/ru/docs/search-api/api-ref/authentication)
 
+## How to use Yandex Search MCP Remotely (recommended)
 ### Yandex Search MCP URL for Remote Connection
 
 ```
 https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse
 ```
 
-## How to use Yandex Search MCP Remotely (recommended)
 ### How to Add Yandex Search MCP to Claude 🤖
 
 #### 1. Configure Claude Desktop to Recognize MCP Servers
@@ -145,6 +145,7 @@ git clone git@github.com:yandex/yandex-search-mcp-server.git
 cd /path/to/yandex-search-mcp-server
 ```
 ### Option 1: Use Yandex Search MCP with Docker/Podman
+#### Step 1. Build the container
 
 To run the MCP server in a container using Docker or Podman:
 
@@ -166,9 +167,9 @@ To run the MCP server in a container using Docker or Podman:
 
 This will create an image named `yandex-mcp-server-image`.
 
-You need to add MCP server configs and set `SEARCH_API_KEY`.
+#### Step 2. Add MCP server configs and set `SEARCH_API_KEY`.
 
-For container deployment, if your MCP system supports direct interaction with Docker or Podman containers, you might use configurations like these (adjust based on your MCP system's requirements):
+For MCP clients that support direct interaction with Docker or Podman containers, add one of these configurations to the MCP config in your MCP client of choice (e.g. mcp.json in VS Code):
 
 - Using Docker:
 ```json
@@ -220,7 +221,7 @@ After updating the configuration, the system should automatically detect and run
   pip install -r requirements.txt
 ```
 
-#### Step 2. Configure the MCP Settings for Local Python Execution
+#### Step 2.1 Configure the MCP Settings in an MCP client
 
 To setup the MCP server on your system using Python, add the following configuration to your MCP settings and set `SEARCH_API_KEY`:
 
@@ -247,7 +248,7 @@ To setup the MCP server on your system using Python, add the following configura
 
 After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
 
-#### Step 3. Launch the local MCP Server
+#### Step 2.2 Launch the local MCP Server directly
 
 To run the MCP server directly on your machine without containerization:
 
@@ -261,9 +262,12 @@ export SEARCH_API_KEY=<your_api_key>
 python3 server.py
 ```
 
-The server will start and listen for input on stdin, responding on stdout. Typically, this server is integrated with a system that communicates via MCP.
+The server will start and listen for input on stdin, responding on stdout. 
+Typically, this server is integrated with a system that communicates via MCP, however you can send requests to the server from the terminal.
 
 ### Example Requests
+
+Copy and Paste these example requests in the terminal with the Yandex Search MCP server running locally to see the search results and the generative AI answer right in the terminal.
 
 #### Web Search Example
 ```json
