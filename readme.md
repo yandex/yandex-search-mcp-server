@@ -75,7 +75,7 @@ Add the following text to your Claude Desktop configuration file:
 
 ```json
 {
-  "servers": {
+  "mcpServers": {
     "yandexSearch": {
       "type": "sse",
       "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
