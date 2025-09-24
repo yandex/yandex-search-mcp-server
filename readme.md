@@ -43,11 +43,9 @@ Add the following text to your Claude Desktop configuration file:
       "args": [
         "-y",
         "mcp-remote",
-        "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse"
-      ],
-      "headers": {
-        "ApiKey": "<your_api_key>"
-      }
+        "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
+        "--header", "ApiKey:<your_api_key>"
+      ]
     }
   }
 }
