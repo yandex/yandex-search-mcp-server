@@ -1,7 +1,7 @@
 import os
 import json
 import base64
-from typing import Dict, Any, Optional, Union
+from typing import Dict, Any, Optional
 
 import requests
 from requests.exceptions import RequestException
@@ -40,6 +40,7 @@ def validate_input_data(data: Dict[str, Any], required_keys: set) -> Optional[st
 
 def call_ai_search_with_yazeka(data: Dict[str, Any]) -> str:
     api_key = os.getenv('SEARCH_API_KEY')
+    folder_id = os.getenv('FOLDER_ID')
     if not api_key:
         raise ValueError("SEARCH_API_KEY environment variable not set")
 
@@ -50,7 +51,7 @@ def call_ai_search_with_yazeka(data: Dict[str, Any]) -> str:
     body = {
         "messages": [{"content": data["query"], "role": "ROLE_USER" }],
         "searchFilters": [ { "lang": ("tr" if data["search_region"] == 'tr' else "en")} ],
-        "folderId": "b1gudsjclvkga651dgci",
+        "folderId": folder_id,
         "fixMisspell": True,
         "enableNrfmDocs": True,
         "search_type": "SEARCH_TYPE_TR" if data["search_region"] == 'tr' else "SEARCH_TYPE_COM"
@@ -60,6 +61,7 @@ def call_ai_search_with_yazeka(data: Dict[str, Any]) -> str:
 
 def call_web_search(data: Dict[str, Any]) -> str:
     api_key = os.getenv('SEARCH_API_KEY')
+    folder_id = os.getenv('FOLDER_ID')
     if not api_key:
         raise ValueError("SEARCH_API_KEY environment variable not set")
 
@@ -75,6 +77,7 @@ def call_web_search(data: Dict[str, Any]) -> str:
             "familyMode": "FAMILY_MODE_NONE",
             "fixTypoMode": "FIX_TYPO_MODE_OFF",
         },
+        "folderId": folder_id,
         "groupSpec": {"groupsOnPage": 4},
         "l10n": "LOCALIZATION_TR" if data["search_region"] == 'tr' else "LOCALIZATION_EN",
         "region": data["search_region"],

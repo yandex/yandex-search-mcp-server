@@ -15,8 +15,8 @@ Features:
 """
 
 import json
-import xml.etree.ElementTree as ET
 import os
+import re
 from typing import Dict, Any
 
 from mcp.server.fastmcp import FastMCP
@@ -60,6 +60,85 @@ def ai_search_with_yazeka(body: dict) -> str:
     return json.dumps(response, ensure_ascii=False, indent=2)
 
 
+def extract_documents_from_xml(xml_content):
+    """Извлекает отдельные документы из XML контента"""
+    doc_strings = []
+    lines = xml_content.split('\n')
+    current_doc = []
+    in_doc = False
+    
+    for line in lines:
+        if '<doc ' in line and 'id=' in line:
+            in_doc = True
+            current_doc = [line]
+        elif in_doc and '</doc>' in line:
+            current_doc.append(line)
+            doc_strings.append('\n'.join(current_doc))
+            in_doc = False
+        elif in_doc:
+            current_doc.append(line)
+    
+    return doc_strings
+
+
+def clean_text(text):
+    """Очищает текст от hlword тегов"""
+    if not text:
+        return ""
+    cleaned = re.sub(r'<hlword>|</hlword>', '', text)
+    return cleaned.strip()
+
+
+def extract_document_elements(doc_string):
+    """Извлекает элементы из строки документа"""
+    url_match = re.search(r'<url>(.*?)</url>', doc_string)
+    headline_match = re.search(r'<headline>(.*?)</headline>', doc_string)
+    title_match = re.search(r'<title>(.*?)</title>', doc_string)
+    passage_matches = re.findall(r'<passage>(.*?)</passage>', doc_string)
+    extended_text_match = re.search(r'<extended-text>(.*?)</extended-text>', doc_string)
+    
+    return {
+        'url': url_match.group(1) if url_match else None,
+        'headline': headline_match.group(1) if headline_match else None,
+        'title': title_match.group(1) if title_match else None,
+        'passages': passage_matches,
+        'extended_text': extended_text_match.group(1) if extended_text_match else None
+    }
+
+
+def get_best_content(elements):
+    """Выбирает лучший контент из доступных элементов"""
+    if elements['headline']:
+        return clean_text(elements['headline']), "headline"
+    elif elements['title']:
+        return clean_text(elements['title']), "title"
+    elif elements['passages']:
+        cleaned_passages = [clean_text(p) for p in elements['passages'] if p]
+        return " ".join(cleaned_passages), "passages"
+    elif elements['extended_text']:
+        return clean_text(elements['extended_text']), "extended-text"
+    else:
+        return None, None
+
+
+def process_single_document(doc_string):
+    """Обрабатывает один документ и возвращает результат"""
+    elements = extract_document_elements(doc_string)
+    
+    if not elements['url']:
+        return None
+    
+    content, source = get_best_content(elements)
+    
+    if content:
+        return {
+            'data': content,
+            'source': elements['url']
+        }
+    
+    return None
+
+
 @mcp.tool()
 def web_search(body: dict) -> str:
     """
@@ -86,11 +165,14 @@ def web_search(body: dict) -> str:
     if error_message := validate_input_data(data, required_keys):
         return error_message
 
-    root = ET.fromstring(call_web_search(data))
-
+    decoded_data = call_web_search(data)
+    doc_strings = extract_documents_from_xml(decoded_data)
     response = {'responses': []}
-    for doc in root.iter('doc'):
-        response["responses"].append({'data': doc.find("./properties/extended-text").text, 'source': doc.find("url").text})
+
+    for doc_string in doc_strings:
+        doc_result = process_single_document(doc_string)
+        if doc_result:
+            response["responses"].append(doc_result)
     
     return json.dumps(response, ensure_ascii=False, indent=2)
 

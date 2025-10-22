@@ -11,8 +11,11 @@ The Yandex Search MCP server includes the following tools:
 
 ## Getting API Key
 
-To use this MCP server, you need to be a customer of Yandex Search API. You need a Yandex Search API key:
+To use this MCP server, you need to be a customer of Yandex Search API. Also you need a Yandex Search API key and folder id:
 - [API Key Documentation](https://yandex.cloud/ru/docs/search-api/api-ref/authentication)
+  - Must include `yc.search-api.execute` scope.
+- [Folder ID Documentation](https://yandex.cloud/ru/docs/resource-manager/operations/folder/get-id)
+  - The service account in this folder must have `search-api.editor` role.
 
 ## How to use Yandex Search MCP Remotely (recommended)
 ### Yandex Search MCP URL for Remote Connection
@@ -44,7 +47,8 @@ Add the following text to your Claude Desktop configuration file:
         "-y",
         "mcp-remote",
         "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
-        "--header", "ApiKey:<your_api_key>"
+        "--header", "ApiKey:<your_api_key>",
+        "--header", "FolderId:<your_folder_id>"
       ]
     }
   }
@@ -78,7 +82,8 @@ Add the following text to your Claude Desktop configuration file:
       "type": "sse",
       "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
       "headers": {
-        "ApiKey": "<your_api_key>"
+        "ApiKey": "<your_api_key>",
+        "FolderId": "<your_folder_id>"
       }
     }
   }
@@ -113,7 +118,8 @@ Add the following text to your Claude Desktop configuration file:
       "type": "sse",
       "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
       "headers": {
-        "ApiKey": "<your_api_key>"
+        "ApiKey": "<your_api_key>",
+        "FolderId": "<your_folder_id>"
       }
     }
   }
@@ -181,7 +187,7 @@ For MCP clients that support direct interaction with Docker or Podman containers
       "command": "sh",
       "args": [
         "-c",
-        "docker rm -f yandex-mcp-container; docker run -i --name yandex-mcp-container --env SEARCH_API_KEY=<your_api_key> yandex-mcp-server-image:latest"
+        "docker rm -f yandex-mcp-container; docker run -i --name yandex-mcp-container --env SEARCH_API_KEY=<your_api_key> --env FOLDER_ID=<your_folder_id> yandex-mcp-server-image:latest"
       ]
     }
   }
@@ -200,14 +206,14 @@ For MCP clients that support direct interaction with Docker or Podman containers
       "command": "sh",
       "args": [
         "-c",
-        "podman rm -f yandex-mcp-container; podman run -i --name yandex-mcp-container --env SEARCH_API_KEY=<your_api_key> yandex-mcp-server-image:latest"
+        "podman rm -f yandex-mcp-container; podman run -i --name yandex-mcp-container --env SEARCH_API_KEY=<your_api_key> --env FOLDER_ID=<your_folder_id> yandex-mcp-server-image:latest"
       ]
     }
   }
 }
 ```
 
-**Important**: Replace `<your_api_key>` with your actual Yandex Search API key. Ensure that only one instance of the server (local or Docker) is active at a time to avoid conflicts.
+**Important**: Replace `<your_api_key>` and `<your_folder_id>` with your actual Yandex Search API key and folder id. Ensure that only one instance of the server (local or Docker) is active at a time to avoid conflicts.
 
 After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
 
@@ -234,6 +240,7 @@ To setup the MCP server on your system using Python, add the following configura
       "command": "env",
       "args": [
         "SEARCH_API_KEY=<your_api_key>",
+        "FOLDER_ID=<your_folder_id>",
         "python3",
         "/path/to/mcp-server-demo/server.py"
       ]
@@ -242,7 +249,7 @@ To setup the MCP server on your system using Python, add the following configura
 }
 ```
 
-**Important**: Replace `<your_api_key>` with your actual Yandex Search API key and update `/path/to/mcp-server-demo` to the actual path where the repository is located on your system if necessary.
+**Important**: Replace `<your_api_key>` and `<your_folder_id>` with your actual Yandex Search API key and folder id. Update `/path/to/mcp-server-demo` to the actual path where the repository is located on your system if necessary.
 
 After updating the configuration, the system should automatically detect and run the server, exposing the `ai_search_with_yazeka` and `web_search` tools for use.
 
@@ -251,7 +258,7 @@ After updating the configuration, the system should automatically detect and run
 To run the MCP server directly on your machine without containerization:
 
 1. Ensure you have Python 3.10+ installed.
-2. Set the required environment variable for the API key (replace `<your_api_key>` with your actual Yandex Search API key):
+2. Set the required environment variable for the API key (replace `<your_api_key>` and `<your_folder_id>` with your actual Yandex Search API key and folder id):
 ```bash
 export SEARCH_API_KEY=<your_api_key>
 ```
