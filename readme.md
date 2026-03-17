@@ -21,7 +21,7 @@ To use this MCP server, you need to be a customer of Yandex Search API. Also you
 ### Yandex Search MCP URL for Remote Connection
 
 ```
-https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse
+https://d5de9siimt9bkld7viic.emzafcgx.apigw.yandexcloud.net:3000/sse
 ```
 
 ### How to Add Yandex Search MCP to Claude 🤖
@@ -46,7 +46,7 @@ Add the following text to your Claude Desktop configuration file:
       "args": [
         "-y",
         "mcp-remote",
-        "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
+        "https://d5de9siimt9bkld7viic.emzafcgx.apigw.yandexcloud.net:3000/sse",
         "--header", "ApiKey:<your_api_key>",
         "--header", "FolderId:<your_folder_id>"
       ]
@@ -80,7 +80,7 @@ Add the following text to your Claude Desktop configuration file:
   "mcpServers": {
     "yandexSearch": {
       "type": "sse",
-      "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
+      "url": "https://d5de9siimt9bkld7viic.emzafcgx.apigw.yandexcloud.net:3000/sse",
       "headers": {
         "ApiKey": "<your_api_key>",
         "FolderId": "<your_folder_id>"
@@ -116,7 +116,7 @@ Add the following text to your Claude Desktop configuration file:
   "mcpServers": {
     "yandexSearch": {
       "type": "sse",
-      "url": "https://d5dj4o5pbnqgca1d546v.cmxivbes.apigw.yandexcloud.net:3000/sse",
+      "url": "https://d5de9siimt9bkld7viic.emzafcgx.apigw.yandexcloud.net:3000/sse",
       "headers": {
         "ApiKey": "<your_api_key>",
         "FolderId": "<your_folder_id>"
